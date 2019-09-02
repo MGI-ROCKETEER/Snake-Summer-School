@@ -72,21 +72,20 @@ class snake(object):
             self.dirnx = -1
             self.dirny = 0
             self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+        elif gpio.input(button2):
+            self.dirnx = 1
+            self.dirny = 0
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-            elif gpio.input(button2):
-                self.dirnx = 1
-                self.dirny = 0
-                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+        elif gpio.input(button3):
+            self.dirnx = 0
+            self.dirny = -1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-            elif gpio.input(button3):
-                self.dirnx = 0
-                self.dirny = -1
-                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-
-            elif gpio.input(button4):
-                self.dirnx = 0
-                self.dirny = 1
-                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+        elif gpio.input(button4):
+            self.dirnx = 0
+            self.dirny = 1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
         for i, c in enumerate(self.body): # c is synonym for the blocks after the head of the snake
             p = c.pos[:]

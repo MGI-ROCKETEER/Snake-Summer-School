@@ -146,12 +146,13 @@ def drawGrid(w, rows, surface):
        
  
 def redrawWindow(surface):
-    global rows, width, s, snack, score
+    global rows, width, s, snack, score, bonus
     win = pygame.display.set_mode((width, width))
     surface.fill((0,0,0))
     s.draw(surface)
     snack.draw(surface)
     drawGrid(width,rows, surface)
+    bonus.draw(surface)
     
     text = font.render('Your score: ' + str(score), True, WHITE_COLOR)
     win.blit(text, (0, 0))
@@ -185,7 +186,7 @@ def message_box(subject, content):
  
  
 def main():
-    global width, rows, s, snack, score
+    global width, rows, s, snack, score, bonus
     width = 500
     rows = 20
     score = 0
@@ -193,6 +194,7 @@ def main():
     s = snake((255,0,0), (10,10))
     snack = cube(randomSnack(rows, s), color=(0,255,0))
     flag = True
+    
 
 
     clock = pygame.time.Clock()
@@ -205,6 +207,9 @@ def main():
             s.addCube()
             snack = cube(randomSnack(rows, s), color=(0,255,0))
             score += 1
+            if score%10 == 0 and score != 0:
+                bonus = cube(randomSnack(rows, s), color=(128,0,128))
+
  
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):

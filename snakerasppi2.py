@@ -155,8 +155,9 @@ def redrawWindow(surface):
     snack.draw(surface)
     dorian.draw(surface)
     dorian2.draw(surface)
-    drawGrid(width,rows, surface)
     bonus.draw(surface)
+    drawGrid(width,rows, surface)
+    
     
     text = font.render('Your score: ' + str(score), True, WHITE_COLOR)
     win.blit(text, (0, 0))
@@ -231,8 +232,9 @@ def main():
             c = c+1
             score +=1
             s.speed = s.speed+5 #everytimeeats cube goes faster
-            if score%10 == 0 and score != 0:
+            if score % 10 == 0 and (c!=0):
                 bonus = cube(randomSnack(rows, s), color=(128,0,128))
+
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:

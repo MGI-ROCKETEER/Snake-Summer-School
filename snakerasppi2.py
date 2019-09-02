@@ -1,10 +1,22 @@
 #Snake Tutorial Python
- 
+
+import RPi.GPIO as gpio
 import math
 import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
+
+button1 = 18
+button2 = 23
+button3 = 24
+button4 = 25
+gpio.setmode(gpio.BCM)
+
+gpio.setup(button1, gpio.IN)
+gpio.setup(button2, gpio.IN)
+gpio.setup(button3, gpio.IN)
+gpio.setup(button4, gpio.IN)
  
 WHITE_COLOR = (255, 255, 255) # Color for score display
 pygame.font.init()
@@ -57,32 +69,25 @@ class snake(object):
         self.speed = 5
  
     def move(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
- 
-            keys = pygame.key.get_pressed()
- 
-            for key in keys:
-                if keys[pygame.K_LEFT]:
-                    self.dirnx = -1
-                    self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
- 
-                elif keys[pygame.K_RIGHT]:
-                    self.dirnx = 1
-                    self.dirny = 0
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
- 
-                elif keys[pygame.K_UP]:
-                    self.dirnx = 0
-                    self.dirny = -1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
- 
-                elif keys[pygame.K_DOWN]:
-                    self.dirnx = 0
-                    self.dirny = 1
-                    self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+        if gpio.input(button1):
+            self.dirnx = -1
+            self.dirny = 0
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        elif gpio.input(button2):
+            self.dirnx = 1
+            self.dirny = 0
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        elif gpio.input(button3):
+            self.dirnx = 0
+            self.dirny = -1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        elif gpio.input(button4):
+            self.dirnx = 0
+            self.dirny = 1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
  
         for i, c in enumerate(self.body): # c is synonym for the blocks after the head of the snake
             p = c.pos[:]

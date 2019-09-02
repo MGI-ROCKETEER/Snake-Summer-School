@@ -1,12 +1,11 @@
 #Snake Tutorial Python
-
 import RPi.GPIO as gpio
+
 import math
 import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
-
 button1 = 18
 button2 = 23
 button3 = 24
@@ -17,7 +16,7 @@ gpio.setup(button1, gpio.IN)
 gpio.setup(button2, gpio.IN)
 gpio.setup(button3, gpio.IN)
 gpio.setup(button4, gpio.IN)
- 
+  
 WHITE_COLOR = (255, 255, 255) # Color for score display
 pygame.font.init()
 font = pygame.font.SysFont('comicsans', 30)
@@ -74,21 +73,21 @@ class snake(object):
             self.dirny = 0
             self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-        elif gpio.input(button2):
-            self.dirnx = 1
-            self.dirny = 0
-            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+            elif gpio.input(button2):
+                self.dirnx = 1
+                self.dirny = 0
+                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-        elif gpio.input(button3):
-            self.dirnx = 0
-            self.dirny = -1
-            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+            elif gpio.input(button3):
+                self.dirnx = 0
+                self.dirny = -1
+                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
 
-        elif gpio.input(button4):
-            self.dirnx = 0
-            self.dirny = 1
-            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
- 
+            elif gpio.input(button4):
+                self.dirnx = 0
+                self.dirny = 1
+                self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
         for i, c in enumerate(self.body): # c is synonym for the blocks after the head of the snake
             p = c.pos[:]
             if p in self.turns:
@@ -333,10 +332,10 @@ def main():
             s.reset((10,10))
             score = 0
             break
-            
+
         elif type(bonus) != bool :
             bonus_time += 1
-            if bonus_time == 40:
+            if bonus_time == 50:
                 bonus = False
                 bonus_time = 0
  

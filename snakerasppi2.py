@@ -211,6 +211,7 @@ def main():
                 print('Score:', len(s.body))
                 message_box('You Lost!', 'Play again...')
                 s.reset((10,10))
+                score = 0
                 break
  
            

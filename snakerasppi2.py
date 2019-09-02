@@ -234,7 +234,6 @@ def main():
             s.speed = s.speed+5 #everytimeeats cube goes faster
             if score % 10 == 0 and (c!=0):
                 bonus = cube(randomSnack(rows, s), color=(128,0,128))
-
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -310,6 +309,9 @@ def main():
             message_box('You Lost!', 'Play again...')
             s.reset((10,10))
             break
+
+        elif s.body[0].pos == bonus.pos:
+            score += 5
 
         elif s.body[0].pos == dorian2.pos:
             print('Score: ', len(s.body))

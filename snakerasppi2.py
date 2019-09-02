@@ -148,14 +148,15 @@ def drawGrid(w, rows, surface):
        
  
 def redrawWindow(surface):
-    global rows, width, s, snack, score, dorian, dorian2, bonus
+    global rows, width, s, snack, score, dorian, dorian2
     win = pygame.display.set_mode((width, width))
     surface.fill((0,0,0))
     s.draw(surface)
     snack.draw(surface)
     dorian.draw(surface)
     dorian2.draw(surface)
-    bonus.draw(surface)
+    if bonus:
+        bonus.draw(surface)
     drawGrid(width,rows, surface)
     
     
@@ -214,9 +215,10 @@ def main():
     snack = cube(randomSnack(rows, s), color=(0,255,0))
     dorian = cube(randomDorian(rows, s), color=(225,225,225))
     dorian2 = cube(randomDorian(rows,s), color=(225,225,225))
-    bonus = cube((0,0), color=(0,0,0))
+    #bonus = cube((0,0), color=(0,0,0))
     flag = True
-    
+    bonus = False
+    bonus_time = 0
     clock = pygame.time.Clock()
    
     while flag:
@@ -232,8 +234,8 @@ def main():
             c = c+1
             score +=1
             s.speed = s.speed+5 #everytimeeats cube goes faster
-            if score % 10 == 0 and (c!=0):
-                bonus = cube(randomSnack(rows, s), color=(128,0,128))
+            if score % 5 == 0 and c != 0:
+                bonus = cube(randomSnack(rows, s), color=(128,0,128))    
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -258,7 +260,9 @@ def main():
             dorian = cube(randomDorian(rows,s), color = (225,225,225))
             c = c+1
             score +=1
-            s.speed = s.speed+5 #everytimeeats cube goes faster
+            s.speed = s.speed+5
+            if score % 5 == 0 and c != 0:
+                bonus = cube(randomSnack(rows, s), color=(128,0,128))    #everytimeeats cube goes faster
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -283,7 +287,9 @@ def main():
             dorian = cube(randomDorian(rows,s), color = (225,225,225))
             c = c+1
             score +=1
-            s.speed = s.speed+5 #everytimeeats cube goes faster
+            s.speed = s.speed+5
+            if score % 5 == 0 and c != 0:
+                bonus = cube(randomSnack(rows, s), color=(128,0,128))    #everytimeeats cube goes faster
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -308,17 +314,26 @@ def main():
             print('Score: ', len(s.body))
             message_box('You Lost!', 'Play again...')
             s.reset((10,10))
+            score = 0
             break
 
-        elif s.body[0].pos == bonus.pos:
+        elif bonus and s.body[0].pos == bonus.pos:
             score += 5
+            bonus = False
+
 
         elif s.body[0].pos == dorian2.pos:
             print('Score: ', len(s.body))
             message_box('You Lost!', 'Play again...')
             s.reset((10,10))
+            score = 0
             break
-       
+            
+        elif type(bonus) != bool :
+            bonus_time += 1
+            if bonus_time == 40:
+                bonus = False
+                bonus_time = 0
  
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):

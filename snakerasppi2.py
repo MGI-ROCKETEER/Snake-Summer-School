@@ -7,10 +7,10 @@ import pygame
 import tkinter as tk
 from tkinter import messagebox
 
-button1 = 18
-button2 = 23
-button3 = 24
-button4 = 25
+button1 = 21
+button2 = 16
+button3 = 20
+button4 = 12
 gpio.setmode(gpio.BCM)
 
 gpio.setup(button1, gpio.IN)

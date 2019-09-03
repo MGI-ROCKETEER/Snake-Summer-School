@@ -14,6 +14,7 @@ button3 = 20
 button4 = 12
 button5 = 5
 button6 = 27
+red_led = 6
 gpio.setmode(gpio.BCM)
 gpio.setup(button1, gpio.IN)
 gpio.setup(button2, gpio.IN)
@@ -21,6 +22,8 @@ gpio.setup(button3, gpio.IN)
 gpio.setup(button4, gpio.IN)
 gpio.setup (button5, gpio.IN)
 gpio.setup(button6, gpio.IN)
+gpio.setup(red_led, gpio.OUT)
+gpio.output(red_led, False)
 
 lcd_rs = 25
 lcd_en = 24
@@ -33,7 +36,7 @@ lcd_columns = 16
 lcd_rows = 2
 
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
-
+lcd.clear()
 
 
 WHITE_COLOR = (255, 255, 255) # Color for score display
@@ -110,7 +113,7 @@ class Menu(object):
         # or just by clicking eXit (close) button on a window
         
         while True:
-            lcd.message("Snake\nHave Fun\n")
+            lcd.message("The Cool Snake\nGood Luck\n")
             
             if gpio.input(button6):
                 # always the last field should be Exit
@@ -118,8 +121,8 @@ class Menu(object):
                     shutdown()
                 elif self.curr_position == 0:
                     return 2
-                elif self.curr_position == 1:
-                    return 3
+                #elif self.curr_position == 1:
+                    #return 3
             if gpio.input(button3):
                 self.draw(-1)
             if gpio.input(button4):
@@ -477,8 +480,10 @@ def main():
         elif s.body[0].pos == dorian.pos:
             lcd.clear()
             lcd.message("Score: "+str(score)+"\nngl that was bad")
+            gpio.output(red_led, True)
             print('Score: ', len(s.body))
-            message_box('u crazy?!?', 'LOOK OUT man!!')
+            message_box("dead", "RIP Snake. You didn't deserve that!")
+            
             
             s.reset((10,10))
             score = 0
@@ -490,9 +495,11 @@ def main():
 
         elif s.body[0].pos == dorian2.pos:
             lcd.clear()
-            lcd.message("Score: "+str(score)+"\nAt Least you tried")
+            lcd.message("Score: "+str(score)+"\nAt Least Try!")
+            gpio.output(red_led, True)
             print('Score: ', len(s.body))
-            message_box('u crazy?!?', 'LOOK OUT man!!')
+            message_box('death', "You killed your snake. I hope you're happy")
+            
            
             s.reset((10,10))
             score = 0
@@ -508,9 +515,11 @@ def main():
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
                 pygame.mixer.music.stop()
                 lcd.clear()
-                lcd.message("Your Score: "+str(score)+",\nI've seen better")
+                lcd.message("Your Score: "+str(score)+"\nI've seen better")
+                gpio.output(red_led, True)
                 print('Score:', len(s.body))
-                message_box('ouchh', 'loooooook ouuuut!')
+                message_box('ouchh', "Am I invited to the funeral?")
+                
                 
                 s.reset((10,10))
                 score = 0
@@ -526,3 +535,4 @@ def main():
  
 start_screen()
 main()
+gpio.cleanup()

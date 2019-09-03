@@ -169,9 +169,8 @@ class snake(object):
         self.dirnx = 0
         self.dirny = 1
         self.speed = 5
-    """
- 
-    def move(self):
+    
+    def moverasp(self):
         if gpio.input(button1):
             self.dirnx = -1
             self.dirny = 0
@@ -204,7 +203,7 @@ class snake(object):
                 elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
                 elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
                 else: c.move(c.dirnx,c.dirny)
-    """
+    
     def move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -469,8 +468,7 @@ def main():
         elif bonus and s.body[0].pos == bonus.pos:
             score += 5
             bonus = False
-
-
+            
         elif s.body[0].pos == dorian2.pos:
             print('Score: ', len(s.body))
             message_box('u crazy?!?', 'LOOK OUT man!!')

@@ -15,6 +15,9 @@ button4 = 12
 button5 = 5
 button6 = 27
 red_led = 6
+green_led = 13
+yellow_led = 19
+
 gpio.setmode(gpio.BCM)
 gpio.setup(button1, gpio.IN)
 gpio.setup(button2, gpio.IN)
@@ -23,7 +26,12 @@ gpio.setup(button4, gpio.IN)
 gpio.setup (button5, gpio.IN)
 gpio.setup(button6, gpio.IN)
 gpio.setup(red_led, gpio.OUT)
+gpio.setup(green_led, gpio.OUT)
+gpio.setup(yellow_led, gpio.OUT)
+
 gpio.output(red_led, False)
+gpio.output(green_led, False)
+gpio.output(yellow_led, True)
 
 lcd_rs = 25
 lcd_en = 24
@@ -113,8 +121,8 @@ class Menu(object):
         # or just by clicking eXit (close) button on a window
         
         while True:
-            lcd.message("The Cool Snake\nGood Luck\n")
-            
+            lcd.message("Snake (but the\ncool version)\n")
+            gpio.output(yellow_led, True)
             if gpio.input(button6):
                 # always the last field should be Exit
                 if self.curr_position == self.fields_num - 1:
@@ -371,6 +379,8 @@ def message_box(subject, content):
 def main():
     lcd.clear()
     lcd.message("Eat Snacks\nAvoid Obstacles\n")
+    gpio.output(yellow_led, False)
+    gpio.output(green_led, True)
     global width, rows, s, snack, score, dorian, dorian2, bonus
     width = 500
     rows = 20
@@ -480,6 +490,7 @@ def main():
         elif s.body[0].pos == dorian.pos:
             lcd.clear()
             lcd.message("Score: "+str(score)+"\nngl that was bad")
+            gpio.output(green_led, False)
             gpio.output(red_led, True)
             print('Score: ', len(s.body))
             message_box("dead", "RIP Snake. You didn't deserve that!")
@@ -496,6 +507,7 @@ def main():
         elif s.body[0].pos == dorian2.pos:
             lcd.clear()
             lcd.message("Score: "+str(score)+"\nAt Least Try!")
+            gpio.output(green_led, False)
             gpio.output(red_led, True)
             print('Score: ', len(s.body))
             message_box('death', "You killed your snake. I hope you're happy")
@@ -516,6 +528,7 @@ def main():
                 pygame.mixer.music.stop()
                 lcd.clear()
                 lcd.message("Your Score: "+str(score)+"\nI've seen better")
+                gpio.output(green_led, False)
                 gpio.output(red_led, True)
                 print('Score:', len(s.body))
                 message_box('ouchh', "Am I invited to the funeral?")

@@ -11,6 +11,7 @@ button1 = 18
 button2 = 23
 button3 = 24
 button4 = 25
+enter_button = 27
 gpio.setmode(gpio.BCM)
 
 gpio.setup(button1, gpio.IN)

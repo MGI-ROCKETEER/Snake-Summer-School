@@ -229,7 +229,7 @@ def main():
             dorian = cube(randomDorian(rows,s), color = (225,225,225))
             c = c+1
             score +=1
-            s.speed = s.speed+5 #everytimeeats cube goes faster
+            s.speed = s.speed+4 #everytimeeats cube goes faster
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -247,14 +247,14 @@ def main():
             if len(s.body) == 40:
                 s.speed = s.speed-15
             if((c%3 == 0)):
-                dorian2 = cube(randomDorian(row,s), color =(225,225,225))
+                dorian2 = cube(randomDorian(rows,s), color =(225,225,225))
         elif((s.body[0].pos == snack.pos) and (i==1)):##
             s.addCube()##
             snack = cube(randomSnack(rows, s), color = (0,0,225))
             dorian = cube(randomDorian(rows,s), color = (225,225,225))
             c = c+1
             score +=1
-            s.speed = s.speed+5 #everytimeeats cube goes faster
+            s.speed = s.speed+4 #everytimeeats cube goes faster
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -272,14 +272,14 @@ def main():
             if len(s.body) == 40:
                 s.speed = s.speed-15
             if((c%3 == 0)):
-                dorian2 = cube(randomDorian(row,s), color =(225,225,225))
+                dorian2 = cube(randomDorian(rows,s), color =(225,225,225))
         elif((s.body[0].pos == snack.pos) and (i==2)):##
             s.addCube()##
             snack = cube(randomSnack(rows, s), color = (255,0,0))
             dorian = cube(randomDorian(rows,s), color = (225,225,225))
             c = c+1
             score +=1
-            s.speed = s.speed+5 #everytimeeats cube goes faster
+            s.speed = s.speed+4 #everytimeeats cube goes faster
             if len(s.body) == 5:
                 s.speed = s.speed-10#if length is 4 he goes 10 slower
             if len(s.body) == 10:
@@ -297,18 +297,18 @@ def main():
             if len(s.body) == 40:
                 s.speed = s.speed-15
             if((c%3 == 0)):
-                dorian2 = cube(randomDorian(row,s), color =(225,225,225))
+                dorian2 = cube(randomDorian(rows,s), color =(225,225,225))
         
 
         elif s.body[0].pos == dorian.pos:
             print('Score: ', len(s.body))
-            message_box('You Lost!', 'Play again...')
+            message_box('u crazy?!?', 'LOOK OUT man!!')
             s.reset((10,10))
             break
 
         elif s.body[0].pos == dorian2.pos:
             print('Score: ', len(s.body))
-            message_box('You Lost!', 'Play again...')
+            message_box('u crazy?!?', 'LOOK OUT man!!')
             s.reset((10,10))
             break
        
@@ -316,7 +316,7 @@ def main():
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
                 print('Score:', len(s.body))
-                message_box('You Lost!', 'Play again...')
+                message_box('ouchh', 'loooooook ouuuut!')
                 s.reset((10,10))
                 score = 0
                 break

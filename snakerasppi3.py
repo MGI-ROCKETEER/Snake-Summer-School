@@ -32,7 +32,7 @@ from pygame.locals import *
 if not pygame.font.get_init():
     pygame.font.init()
 
-
+pygame.mixer.init()
 class Menu(object):
     ''' Simple class designed for drawing menus.
         The simplest way to initialize this menu in your program is to call these three lines:
@@ -169,7 +169,7 @@ class snake(object):
         self.dirnx = 0
         self.dirny = 1
         self.speed = 5
-    
+    """   
     def moverasp(self):
         if gpio.input(button1):
             self.dirnx = -1
@@ -203,7 +203,7 @@ class snake(object):
                 elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
                 elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
                 else: c.move(c.dirnx,c.dirny)
-    
+    """
     def move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -365,6 +365,8 @@ def main():
     dorian2 = cube(randomDorian(rows,s), color=(225,225,225))
     #bonus = cube((0,0), color=(0,0,0))
     flag = True
+    pygame.mixer.music.load('//Users//matthiasgiesbert//Documents//Studium//Master BI//python_Summerschool//Project//melodyloops-adrenaline.mp3')
+    pygame.mixer.music.play(-1)
     bonus = False
     bonus_time = 0
     clock = pygame.time.Clock()
@@ -468,7 +470,7 @@ def main():
         elif bonus and s.body[0].pos == bonus.pos:
             score += 5
             bonus = False
-            
+
         elif s.body[0].pos == dorian2.pos:
             print('Score: ', len(s.body))
             message_box('u crazy?!?', 'LOOK OUT man!!')
@@ -484,6 +486,7 @@ def main():
  
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
+                pygame.mixer.music.stop()
                 print('Score:', len(s.body))
                 message_box('ouchh', 'loooooook ouuuut!')
                 s.reset((10,10))

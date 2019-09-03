@@ -5,10 +5,126 @@ import random
 import pygame
 import tkinter as tk
 from tkinter import messagebox
- 
+"""
+button1 = 18
+button2 = 23
+button3 = 24
+button4 = 25
+gpio.setmode(gpio.BCM)
+
+gpio.setup(button1, gpio.IN)
+gpio.setup(button2, gpio.IN)
+gpio.setup(button3, gpio.IN)
+gpio.setup(button4, gpio.IN)
+"""
 WHITE_COLOR = (255, 255, 255) # Color for score display
 pygame.font.init()
 font = pygame.font.SysFont('comicsans', 30)
+width = 500
+rows = 20
+score = 0
+win = pygame.display.set_mode((width, width))
+import pygame
+import sys
+from pygame.locals import *
+
+if not pygame.font.get_init():
+    pygame.font.init()
+
+
+class Menu(object):
+    ''' Simple class designed for drawing menus.
+        The simplest way to initialize this menu in your program is to call these three lines:
+        menu = Menu(['field1', 'field2', 'field3', 'Exit'])
+        menu.init(x)  # x variable should contain screen surface, e.g. called by pygame.display.set_mode()
+        menu.draw()
+    '''
+    curr_position = 0  # variable used for getting current highlighted field
+    font_size = 60
+    font_style = 'bauhaus93'
+    ground_colour = (0, 0, 0)
+    text_colour = (255, 255, 255)
+    curr_selection_colour = (60, 200, 60)  # highlight colour
+
+    def __init__(self, text_list):
+        self.text_list = text_list
+        self.fields_num = len(text_list)
+
+    def set_colors(self, ground_color, text_colour, curr_selection):
+        # allows alternative change of colour sets
+        self.ground_colour = ground_color
+        self.text_list = text_colour
+        self.curr_selection_colour = curr_selection
+
+    def set_fontsize(self, font_size):
+        self.font_size = font_size
+
+    def init(self, surface):
+        # method for initializing font and getting surface
+        # while calling this method, one should pass the variable with screen surface
+        self.font = pygame.font.SysFont(self.font_style, self.font_size)
+        self.surface = surface
+
+    def draw(self, move=0):
+        # responsible for checking which field should be highlighted, getting current fields positions required for drawing
+        # and drawing all of the menu on screen
+        self.surface.fill(self.ground_colour)
+        if self.curr_position + move in range(self.fields_num):
+            self.curr_position += move
+        screen_size = self.surface.get_size()
+        menu_height = self.font.size(self.text_list[-1])[1] * self.fields_num
+        center = [screen_size[0] / 2, (screen_size[1] - menu_height) / 2]
+        pos = [0, center[1]]
+        for i in range(self.fields_num):
+            pos[0] = center[0] - self.font.size(self.text_list[i])[0] / 2
+            if i == self.curr_position:
+                text = self.font.render(self.text_list[i], 1, self.curr_selection_colour)
+                self.surface.blit(text, pos)
+            else:
+                text = self.font.render(self.text_list[i], 1, self.text_colour)
+                self.surface.blit(text, pos)
+            pos[1] += self.font_size * 1.2
+        pygame.display.update()
+
+    def start(self):
+        # main menu loop, you can exit by pressing ESC keyboard button, by choosing EXIT field
+        # or just by clicking eXit (close) button on a window
+        while True:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    shutdown()
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        shutdown()
+                    if event.key == K_RETURN:
+                        # always the last field should be Exit
+                        if self.curr_position == self.fields_num - 1:
+                            shutdown()
+                        elif self.curr_position == 0:
+                            return 2
+                        elif self.curr_position == 1:
+                            return 3
+                    if event.key == K_UP:
+                        self.draw(-1)
+                    if event.key == K_DOWN:
+                        self.draw(1)
+        pygame.time.wait(10)
+
+
+def shutdown():
+    pygame.quit()
+    sys.exit()
+    
+# if the game starts, wait some time
+pygame.time.wait(1500)  
+
+def start_screen():
+    # initializing menu, getting single or multiplayer after choosing game mode
+    global PLAYERS
+    menu = Menu(['Let us start', 'Exit'])
+    menu.init(win)
+    menu.draw()
+    PLAYERS = menu.start() 
 
 
 class cube(object):
@@ -42,8 +158,6 @@ class cube(object):
             pygame.draw.circle(surface, (0,0,0), circleMiddle2, radius)
        
  
- 
- 
 class snake(object):
     body = []
     turns = {}
@@ -55,7 +169,41 @@ class snake(object):
         self.dirnx = 0
         self.dirny = 1
         self.speed = 5
- 
+
+    def moverasp(self):
+        if gpio.input(button1):
+            self.dirnx = -1
+            self.dirny = 0
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+        elif gpio.input(button2):
+            self.dirnx = 1
+            self.dirny = 0
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        elif gpio.input(button3):
+            self.dirnx = 0
+            self.dirny = -1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        elif gpio.input(button4):
+            self.dirnx = 0
+            self.dirny = 1
+            self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
+
+        for i, c in enumerate(self.body): # c is synonym for the blocks after the head of the snake
+            p = c.pos[:]
+            if p in self.turns:
+                turn = self.turns[p]
+                c.move(turn[0],turn[1])
+                if i == len(self.body)-1:
+                    self.turns.pop(p)
+            else:
+                if c.dirnx == -1 and c.pos[0] <= 0: c.pos = (c.rows-1, c.pos[1])
+                elif c.dirnx == 1 and c.pos[0] >= c.rows-1: c.pos = (0,c.pos[1])
+                elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
+                elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
+                else: c.move(c.dirnx,c.dirny)
+
     def move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -96,8 +244,7 @@ class snake(object):
                 elif c.dirnx == 1 and c.pos[0] >= c.rows-1: c.pos = (0,c.pos[1])
                 elif c.dirny == 1 and c.pos[1] >= c.rows-1: c.pos = (c.pos[0], 0)
                 elif c.dirny == -1 and c.pos[1] <= 0: c.pos = (c.pos[0],c.rows-1)
-                else: c.move(c.dirnx,c.dirny)
-       
+                else: c.move(c.dirnx,c.dirny)"
  
     def reset(self, pos):
         self.head = cube(pos)
@@ -157,8 +304,6 @@ def redrawWindow(surface):
     dorian2.draw(surface)
     bonus.draw(surface)
     drawGrid(width,rows, surface)
-    
-    
     text = font.render('Your score: ' + str(score), True, WHITE_COLOR)
     win.blit(text, (0, 0))
     pygame.display.update()

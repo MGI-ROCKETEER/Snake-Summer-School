@@ -33,7 +33,7 @@ lcd_columns = 16
 lcd_rows = 2
 
 lcd = LCD.Adafruit_CharLCD(lcd_rs, lcd_en, lcd_d4, lcd_d5, lcd_d6, lcd_d7, lcd_columns, lcd_rows, lcd_backlight)
-lcd.message('Snake')
+
 
 
 WHITE_COLOR = (255, 255, 255) # Color for score display
@@ -108,7 +108,9 @@ class Menu(object):
     def start(self):
         # main menu loop, you can exit by pressing ESC keyboard button, by choosing EXIT field
         # or just by clicking eXit (close) button on a window
+        
         while True:
+            lcd.message("Snake\nHave Fun\n")
             
             if gpio.input(button6):
                 # always the last field should be Exit
@@ -364,6 +366,8 @@ def message_box(subject, content):
  
  
 def main():
+    lcd.clear()
+    lcd.message("Eat Snacks\nAvoid Obstacles\n")
     global width, rows, s, snack, score, dorian, dorian2, bonus
     width = 500
     rows = 20
@@ -471,8 +475,11 @@ def main():
         
 
         elif s.body[0].pos == dorian.pos:
+            lcd.clear()
+            lcd.message("Score: "+str(score)+"\nngl that was bad")
             print('Score: ', len(s.body))
             message_box('u crazy?!?', 'LOOK OUT man!!')
+            
             s.reset((10,10))
             score = 0
             break
@@ -482,8 +489,11 @@ def main():
             bonus = False
 
         elif s.body[0].pos == dorian2.pos:
+            lcd.clear()
+            lcd.message("Score: "+str(score)+"\nAt Least you tried")
             print('Score: ', len(s.body))
             message_box('u crazy?!?', 'LOOK OUT man!!')
+           
             s.reset((10,10))
             score = 0
             break
@@ -497,8 +507,11 @@ def main():
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
                 pygame.mixer.music.stop()
+                lcd.clear()
+                lcd.message("Your Score: "+str(score)+",\nI've seen better")
                 print('Score:', len(s.body))
                 message_box('ouchh', 'loooooook ouuuut!')
+                
                 s.reset((10,10))
                 score = 0
                 break
